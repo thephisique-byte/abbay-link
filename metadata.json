@@ -1,0 +1,8 @@
+{
+  "name": "ABAYLINK",
+  "description": "B2B sourcing and supplier discovery platform connecting Ethiopian buyers with global suppliers.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

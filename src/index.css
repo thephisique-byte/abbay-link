@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --color-brand-navy: #063B73;
+    --color-brand-blue: #0B5FA5;
+    --color-brand-teal: #0B8F73;
+    --color-brand-green: #35A878;
+    --color-brand-bg: #F7F9FC;
+    --color-brand-text: #102A43;
+    --color-brand-muted: #64748B;
+    --color-brand-border: #E5EAF0;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  body {
+    background-color: var(--color-brand-bg);
+    color: var(--color-brand-text);
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* Custom utility styles */
+.text-balance {
+  text-wrap: balance;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
