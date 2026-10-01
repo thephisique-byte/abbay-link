@@ -158,13 +158,17 @@ export interface ProductReference {
   subCategory?: string;
   origin: string;
   manufacturer: string;
+  supplierId?: string;
   specs: Record<string, string>;
   shortSpec?: string;
   image: string;
+  galleryImages?: string[];
   description: string;
   typicalMOQ: string;
   estimatedPrice?: string;
   supplierAvailability?: string;
   applications?: string[];
   documents?: string[];
+  badge?: string;
+  isRecommended?: boolean;
 }

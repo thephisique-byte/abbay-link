@@ -44,9 +44,14 @@ interface AppContextType {
   signupUser: (userData: { name: string; company: string; email: string; phone: string; role: UserRole; country: string; city: string }) => void;
   logoutUser: () => void;
 
-  // Saved Sourcing Opportunities
+  // Saved Sourcing Opportunities & Products (Sourcing List)
   savedOpportunityIds: string[];
   toggleSaveOpportunity: (id: string) => void;
+  savedProductIds: string[];
+  toggleSaveProduct: (id: string) => void;
+  isSavedModalOpen: boolean;
+  openSavedModal: () => void;
+  closeSavedModal: () => void;
 
   // Notifications
   notifications: AppNotification[];
@@ -277,7 +282,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'signup' | 'forgot'>('login');
 
-  // Saved Opportunities
+  // Saved Opportunities & Products
   const [savedOpportunityIds, setSavedOpportunityIds] = useState<string[]>(() => {
     const saved = localStorage.getItem('abaylink_saved_opps');
     if (saved) {
@@ -289,6 +294,40 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
     return ['REQ-2026-0841'];
   });
+
+  const [savedProductIds, setSavedProductIds] = useState<string[]>(() => {
+    const saved = localStorage.getItem('abaylink_saved_prods');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch {
+        return ['prod-hdpe-pipe', 'prod-waterproofing-membrane'];
+      }
+    }
+    return ['prod-hdpe-pipe', 'prod-waterproofing-membrane'];
+  });
+
+  const [isSavedModalOpen, setIsSavedModalOpen] = useState(false);
+  const openSavedModal = () => setIsSavedModalOpen(true);
+  const closeSavedModal = () => setIsSavedModalOpen(false);
+
+  useEffect(() => {
+    localStorage.setItem('abaylink_saved_prods', JSON.stringify(savedProductIds));
+  }, [savedProductIds]);
+
+  const toggleSaveProduct = (id: string) => {
+    setSavedProductIds((prev) => {
+      const exists = prev.includes(id);
+      const updated = exists ? prev.filter((item) => item !== id) : [...prev, id];
+      const prod = REFERENCE_PRODUCTS.find((p) => p.id === id);
+      addNotification(
+        exists ? 'Removed from Sourcing List' : 'Added to Sourcing List',
+        exists ? `"${prod?.name || id}" removed from your sourcing shortlist.` : `"${prod?.name || id}" saved to your sourcing list.`,
+        'status'
+      );
+      return updated;
+    });
+  };
 
   // Notifications
   const [notifications, setNotifications] = useState<AppNotification[]>(() => {
@@ -702,6 +741,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         logoutUser,
         savedOpportunityIds,
         toggleSaveOpportunity,
+        savedProductIds,
+        toggleSaveProduct,
+        isSavedModalOpen,
+        openSavedModal,
+        closeSavedModal,
         notifications,
         addNotification,
         markNotificationAsRead,
